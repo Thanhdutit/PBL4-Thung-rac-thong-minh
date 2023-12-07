@@ -60,49 +60,7 @@ def get_model():
 my_model = get_model()
 my_model.load_weights("weights-08-1.00.hdf5")
 
-def kt():
-    kt = 0
-    img_req = urllib.request.urlopen(url)
-    imgnp = np.array(bytearray(img_req.read()), dtype=np.uint8)
-    image_org = cv2.imdecode(imgnp, -1)
 
-    # ret, image_org = cap.read()
-    # if not ret:
-    #     continue
-    image_org = cv2.resize(image_org, dsize=None, fx=0.5, fy=0.5)
-    # Resize
-    image = image_org.copy()
-    image = cv2.resize(image, dsize=(128, 128))
-    image = image.astype('float')*1./255
-    # Convert to tensor
-    image = np.expand_dims(image, axis=0)
-
-    # Predict
-    predict = my_model.predict(image)
-    print("This picture is: ", class_name[np.argmax(predict[0])], (predict[0]))
-    print(np.max(predict[0], axis=0))
-    if (np.max(predict) >= 0.9) and (np.argmax(predict[0]) != 3):
-        if (class_name[np.argmax(predict[0])] == "nilon"):
-            print("truenilon")
-            kt = 1
-            #/await websocket.send("1")
-   
-        if (class_name[np.argmax(predict[0])] == "Nhua"):
-            print("truenhua")
-            kt =2
-            #await websocket.send("2")
-
-        if (class_name[np.argmax(predict[0])] == "Giay"):
-            print("truegiay")
-            kt =3
-            #/await websocket.send("3")
-        
-    cv2.imshow("Picture", image_org)
-
-    cap.release()
-    cv2.destroyAllWindows()
-
-    return kt
     
 
 async def echo(websocket):
